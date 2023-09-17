@@ -97,9 +97,24 @@
         clearInterval(interval);
         let finalChoice = videos[Math.floor(Math.random() * videos.length)];
         spinnerElement.innerHTML = `<img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
-        <br><a href="https://www.yout-ube.com/watch?v=${finalChoice.videoId}" target="_blank">Play</a>
-        <br><br>${selectTest()}`;
-      }, 2000);
+        setTimeout(function() {
+          clearInterval(interval);
+          let finalChoice = videos[Math.floor(Math.random() * videos.length)];
+          let test = selectTest();
+          let videoUrl = `https://www.yout-ube.com/watch?v=${finalChoice.videoId}`;
+          let videoTitle = finalChoice.title;
+          let videoThumbnail = finalChoice.thumbnail;
+          let html = `
+            <div>
+              <div>${test}</div>
+              <a href="${videoUrl}" target="_blank">
+                <img src="${videoThumbnail}" alt="${videoTitle}">
+              </a>
+            </div>
+          `;
+          let spinnerElement = document.getElementById('spinner');
+          spinnerElement.innerHTML = html;
+        }, 2000);
     }
   </script>
 </head>
