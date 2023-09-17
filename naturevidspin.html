@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <head>
-    <style>
-      #spinner img{
-        width: 500px;
-        height: 400px;
-      }
-    </style>
-  </head>
+  <style>
+    #spinner img{
+      width: 500px;
+      height: 400px;
+    }
+  </style>
   <title>YouTube Video Spinner</title>
   <script>
     let apiKey = 'AIzaSyCaytWovYoM9wV6ITylrt53TPigOBT3zKw'; // Replace with your YouTube Data API v3 key here
@@ -36,30 +34,6 @@
       .catch(error => console.error('Error fetching data:', error));
     }
 
-    // Start spinning
-    function spin() {
-      let spinnerElement = document.getElementById('spinner');
-      if (videos.length === 0) {
-        console.error('No videos found');
-        return;
-      }
-
-      interval = setInterval(function() {
-        let video = videos[counter % videos.length];
-        spinnerElement.innerHTML = `<img src="${video.thumbnail}" alt="${video.title}">`;
-        counter++;
-      }, 100);
-
-      // Slow down and stop
-      setTimeout(function() {
-        clearInterval(interval);
-        let finalChoice = videos[Math.floor(Math.random() * videos.length)];
-        spinnerElement.innerHTML = `<img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
-        <br><a href="https://www.yout-ube.com/watch?v=${finalChoice.videoId}" target="_blank">Play</a>`;
-      }, 2000);
-    }
-  </script>
-  <script>
     let tests = [
       "Listen carefully to the video. What do you hear?",
       "What animals do you see?",
@@ -96,25 +70,18 @@
       setTimeout(function() {
         clearInterval(interval);
         let finalChoice = videos[Math.floor(Math.random() * videos.length)];
-        spinnerElement.innerHTML = `<img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
-        setTimeout(function() {
-          clearInterval(interval);
-          let finalChoice = videos[Math.floor(Math.random() * videos.length)];
-          let test = selectTest();
-          let videoUrl = `https://www.youtube.com/watch?v=${finalChoice.videoId}`;
-          let videoTitle = finalChoice.title;
-          let videoThumbnail = finalChoice.thumbnail;
-          let html = `
-            <div>
-              <div>${test}</div>
-              <a href="${videoUrl}" target="_blank">
-                <img src="${videoThumbnail}" alt="${videoTitle}">
-              </a>
-            </div>
-          `;
-          let spinnerElement = document.getElementById('spinner');
-          spinnerElement.innerHTML = html;
-        }, 2000);
+        let test = selectTest();
+        let videoUrl = `https://www.yout-ube.com/watch?v=${finalChoice.videoId}`;
+        let html = `
+          <div>
+            <div>${test}</div>
+            <a href="${videoUrl}" target="_blank">
+              <img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
+            </a>
+          </div>
+        `;
+        spinnerElement.innerHTML = html;
+      }, 2000);
     }
   </script>
 </head>
@@ -122,7 +89,6 @@
   <div id="spinner" style="font-size: 48px;">
     <!-- Spinner thumbnail will go here -->
   </div>
-
   <button onclick="spin()">Spin!</button>
 </body>
 </html>
