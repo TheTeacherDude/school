@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <head>
+    <style>
+      #spinner img{
+        width: 500px;
+        height: 400px;
+      }
+    </style>
+  </head>
   <title>YouTube Video Spinner</title>
   <script>
     let apiKey = 'AIzaSyCaytWovYoM9wV6ITylrt53TPigOBT3zKw'; // Replace with your YouTube Data API v3 key here
@@ -47,7 +55,50 @@
         clearInterval(interval);
         let finalChoice = videos[Math.floor(Math.random() * videos.length)];
         spinnerElement.innerHTML = `<img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
-        <br><a href="https://www.youtube.com/watch?v=${finalChoice.videoId}" target="_blank">Play</a>`;
+        <br><a href="https://www.yout-ube.com/watch?v=${finalChoice.videoId}" target="_blank">Play</a>`;
+      }, 2000);
+    }
+  </script>
+  <script>
+    let tests = [
+      "Listen carefully to the video. What do you hear?",
+      "What animals do you see?",
+      "Count the number of animals you see that are larger than a cat.",
+      "Count the number of animals you see that are larger than a small car.",
+      "What kinds of plants do you see?",
+      "Count the number of objects in the video that are blue.",
+      "Count the number of objects in the video that are red.",
+      "Imagine you are at the video's location.  Take a deep breath and smell the air. What do you smell?",
+      "Imagine you could touch the ground and describe the texture. What do you feel?",
+      "Pick an object in the video.  Imagine running your hands over the object. What do you feel?  Is it hard, or soft?  Is it smooth, or rough?  Is it hot, or cold?",
+    ];
+
+    function selectTest() {
+      let testIndex = Math.floor(Math.random() * tests.length);
+      return tests[testIndex];
+    }
+
+    // Start spinning
+    function spin() {
+      let spinnerElement = document.getElementById('spinner');
+      if (videos.length === 0) {
+        console.error('No videos found');
+        return;
+      }
+
+      interval = setInterval(function() {
+        let video = videos[counter % videos.length];
+        spinnerElement.innerHTML = `<img src="${video.thumbnail}" alt="${video.title}">`;
+        counter++;
+      }, 100);
+
+      // Slow down and stop
+      setTimeout(function() {
+        clearInterval(interval);
+        let finalChoice = videos[Math.floor(Math.random() * videos.length)];
+        spinnerElement.innerHTML = `<img src="${finalChoice.thumbnail}" alt="${finalChoice.title}">
+        <br><a href="https://www.yout-ube.com/watch?v=${finalChoice.videoId}" target="_blank">Play</a>
+        <br><br>${selectTest()}`;
       }, 2000);
     }
   </script>
