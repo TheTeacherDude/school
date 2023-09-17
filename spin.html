@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spinner</title>
+  <script>
+    let senses = ["Seeing", "Hearing", "Taste", "Touch", "Smell"];
+    let interval;
+    let counter = 0;
+
+    function spin() {
+      let spinnerElement = document.getElementById("spinner");
+
+      interval = setInterval(function() {
+        spinnerElement.innerHTML = senses[counter % senses.length];
+        counter++;
+      }, 100);
+
+      // Slow down and stop
+      setTimeout(function() {
+        clearInterval(interval);
+        let finalChoice = senses[Math.floor(Math.random() * senses.length)];
+        spinnerElement.innerHTML = finalChoice;
+      }, 2000);
+    }
+  </script>
+</head>
+<body>
+  <div id="spinner" style="font-size: 48px;">
+    <!-- Spinner text will go here -->
+  </div>
+
+  <button onclick="spin()">Spin!</button>
+</body>
+</html>
