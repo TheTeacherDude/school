@@ -3,8 +3,8 @@
 <head>
   <title>YouTube Video Spinner</title>
   <script>
-    let apiKey = 'AIzaSyCaytWovYoM9wV6ITylrt53TPigOBT3zKw'; // Your YouTube Data API v3 key here
-    let playlistId = 'PLwBoQZPcMB03nmHKpmXBoBD0NqaoHB29H';
+    let apiKey = 'AIzaSyCaytWovYoM9wV6ITylrt53TPigOBT3zKw'; // Replace with your YouTube Data API v3 key here
+    let playlistId = 'PLwBoQZPcMB03nmHKpmXBoBD0NqaoHB29H'; // Replace with your YouTube playlist ID here
     let videos = [];
     let interval;
     let counter = 0;
@@ -15,9 +15,13 @@
       fetch(url)
       .then(response => response.json())
       .then(data => {
+        if (!data.items) {
+          console.error('Error fetching data:', data.error);
+          return;
+        }
         videos = data.items.map(item => ({
           title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails.default.url,
+          thumbnail: item.snippet.thumbnails.default ? item.snippet.thumbnails.default.url : '',
           videoId: item.snippet.resourceId.videoId
         }));
       })
@@ -27,6 +31,10 @@
     // Start spinning
     function spin() {
       let spinnerElement = document.getElementById('spinner');
+      if (videos.length === 0) {
+        console.error('No videos found');
+        return;
+      }
 
       interval = setInterval(function() {
         let video = videos[counter % videos.length];
