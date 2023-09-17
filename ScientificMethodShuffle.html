@@ -3,6 +3,10 @@
 <head>
   <title>Scientific Method Drag and Drop</title>
   <style>
+    #mainWrapper {
+      display: flex;
+      align-items: flex-start;
+    }
     #container {
       width: 400px;
       height: 600px;
@@ -20,22 +24,25 @@
     }
     #rewardImage {
       display: none;
+      margin-left: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Arrange the Steps of the Scientific Method</h1>
   <button id="shuffleButton">Shuffle</button>
-  <div id="container">
-    <div class="draggable" data-step="1" draggable="true">Ask a question about something you observe.</div>
-    <div class="draggable" data-step="2" draggable="true">Do background research to learn what is already known about the topic.</div>
-    <div class="draggable" data-step="3" draggable="true">Construct a hypothesis.</div>
-    <div class="draggable" data-step="4" draggable="true">Conduct an experiment.</div>
-    <div class="draggable" data-step="5" draggable="true">Analyze the data and draw conclusions.</div>
-    <div class="draggable" data-step="6" draggable="true">Communicate the results to others and undergo peer review.</div>
+  <div id="mainWrapper">
+    <div id="container">
+      <!-- Steps are identified by data-step attribute for validation -->
+      <div class="draggable" data-step="1" draggable="true">Ask a question about something you observe.</div>
+      <div class="draggable" data-step="2" draggable="true">Do background research to learn what is already known about the topic.</div>
+      <div class="draggable" data-step="3" draggable="true">Construct a hypothesis.</div>
+      <div class="draggable" data-step="4" draggable="true">Conduct an experiment.</div>
+      <div class="draggable" data-step="5" draggable="true">Analyze the data and draw conclusions.</div>
+      <div class="draggable" data-step="6" draggable="true">Communicate the results to others and undergo peer review.</div>
+    </div>
+    <img id="rewardImage" src="super.png" alt="You got it right!">
   </div>
-  <img id="rewardImage" src="super.png" alt="You got it right!">
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       let dragSrcEl = null;
