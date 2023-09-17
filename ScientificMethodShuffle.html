@@ -38,7 +38,7 @@
     <div class="draggable" data-step="5" draggable="true">Analyze the data and draw conclusions.</div>
     <div class="draggable" data-step="6" draggable="true">Communicate the results to others and undergo peer review.</div>
   </div>
-  <img id="rewardImage" src="Super.png" alt="You got it right!">
+  <img id="rewardImage" src="GotIt.png" alt="You got it right!">
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -64,8 +64,13 @@
           e.stopPropagation();
         }
         if (dragSrcEl != this) {
-          dragSrcEl.innerHTML = this.innerHTML;
-          this.innerHTML = e.dataTransfer.getData('text/html');
+          // Swap innerHTML and data-step attribute
+          const tempHTML = this.innerHTML;
+          const tempStep = this.getAttribute('data-step');
+          this.innerHTML = dragSrcEl.innerHTML;
+          this.setAttribute('data-step', dragSrcEl.getAttribute('data-step'));
+          dragSrcEl.innerHTML = tempHTML;
+          dragSrcEl.setAttribute('data-step', tempStep);
         }
         checkOrder();
         return false;
