@@ -18,9 +18,6 @@
       border: 1px solid black;
       cursor: grab;
     }
-    .dragging {
-      cursor: grabbing;
-    }
     #rewardImage {
       display: none;
     }
@@ -38,7 +35,7 @@
     <div class="draggable" data-step="5" draggable="true">Analyze the data and draw conclusions.</div>
     <div class="draggable" data-step="6" draggable="true">Communicate the results to others and undergo peer review.</div>
   </div>
-  <img id="rewardImage" src="Super.png" alt="You got it right!">
+  <img id="rewardImage" src="GotIt.png" alt="You got it right!">
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -48,7 +45,6 @@
         this.style.opacity = '0.5';
         dragSrcEl = this;
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/html', this.innerHTML);
       }
 
       function handleDragOver(e) {
@@ -64,13 +60,9 @@
           e.stopPropagation();
         }
         if (dragSrcEl != this) {
-          // Swap innerHTML and data-step attribute
-          const tempHTML = this.innerHTML;
-          const tempStep = this.getAttribute('data-step');
-          this.innerHTML = dragSrcEl.innerHTML;
-          this.setAttribute('data-step', dragSrcEl.getAttribute('data-step'));
-          dragSrcEl.innerHTML = tempHTML;
-          dragSrcEl.setAttribute('data-step', tempStep);
+          // Swap the elements
+          [this.innerHTML, dragSrcEl.innerHTML] = [dragSrcEl.innerHTML, this.innerHTML];
+          [this.dataset.step, dragSrcEl.dataset.step] = [dragSrcEl.dataset.step, this.dataset.step];
         }
         checkOrder();
         return false;
@@ -85,13 +77,15 @@
         for (let i = container.children.length; i >= 0; i--) {
           container.appendChild(container.children[Math.random() * i | 0]);
         }
+        // Hide the reward image upon shuffling
+        document.getElementById('rewardImage').style.display = 'none';
       }
 
       function checkOrder() {
         const container = document.getElementById('container');
-        const steps = Array.from(container.querySelectorAll('[data-step]'));
-        const order = steps.map(step => parseInt(step.getAttribute('data-step')));
-        if (JSON.stringify(order) === JSON.stringify([1, 2, 3, 4, 5, 6])) {
+        const steps = Array.from(container.querySelectorAll('.draggable'));
+        const order = steps.map(step => step.dataset.step).join(',');
+        if (order === '1,2,3,4,5,6') {
           document.getElementById('rewardImage').style.display = 'block';
         } else {
           document.getElementById('rewardImage').style.display = 'none';
@@ -107,7 +101,7 @@
       });
 
       // Attach shuffle function to button
-      document.getElementById("shuffleButton").addEventListener("click", shuffle);
+      document.getElementById("shuffleButton').addEventListener("click", shuffle);
 
       // Automatically shuffle the steps when the page loads
       shuffle();
