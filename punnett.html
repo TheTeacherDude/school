@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Punnet Square Practice</title>
+  <style>
+    #container {
+      text-align: center;
+    }
+    #table-container {
+      display: inline-block;
+    }
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div id="container">
+  <h1>Punnet Square Practice</h1>
+  <label for="parent1">Parent 1 genotype:</label>
+  <input type="text" id="parent1" placeholder="e.g., Aa">
+  <label for="parent2">Parent 2 genotype:</label>
+  <input type="text" id="parent2" placeholder="e.g., aa">
+  <button onclick="generatePunnetSquare()">Generate</button>
+
+  <div id="table-container">
+    <table id="punnetTable">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<script>
+  function generatePunnetSquare() {
+    const parent1 = document.getElementById('parent1').value.toUpperCase();
+    const parent2 = document.getElementById('parent2').value.toUpperCase();
+    
+    if (parent1.length !== 2 || parent2.length !== 2) {
+      alert('Please enter valid 2-letter genotypes for both parents.');
+      return;
+    }
+    
+    let punnetTable = document.getElementById('punnetTable');
+    
+    let parent1Comb = [parent1.charAt(0) + parent2.charAt(0), parent1.charAt(0) + parent2.charAt(1)];
+    let parent2Comb = [parent1.charAt(1) + parent2.charAt(0), parent1.charAt(1) + parent2.charAt(1)];
+    
+    punnetTable.rows[0].cells[1].innerHTML = parent1.charAt(0);
+    punnetTable.rows[0].cells[2].innerHTML = parent1.charAt(1);
+    punnetTable.rows[1].cells[0].innerHTML = parent2.charAt(0);
+    punnetTable.rows[2].cells[0].innerHTML = parent2.charAt(1);
+    
+    punnetTable.rows[1].cells[1].innerHTML = parent1Comb[0];
+    punnetTable.rows[1].cells[2].innerHTML = parent2Comb[0];
+    punnetTable.rows[2].cells[1].innerHTML = parent1Comb[1];
+    punnetTable.rows[2].cells[2].innerHTML = parent2Comb[1];
+  }
+</script>
+
+</body>
+</html>
