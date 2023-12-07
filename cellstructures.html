@@ -4,23 +4,37 @@
 <meta charset="UTF-8">
 <title>Cell Structure Drag and Drop Quiz</title>
 <style>
+  body {
+    font-family: Arial, sans-serif;
+  }
   .draggable {
-    padding: 5px;
-    margin: 5px;
-    background-color: #f2f2f2;
-    border: 1px solid #cccccc;
+    padding: 8px 10px;
+    margin: 6px 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
     cursor: pointer;
-    user-select: none;
+    text-align: center;
   }
   .dropzone {
     position: absolute;
     width: 150px; /* Adjust as needed */
     height: 30px; /* Adjust as needed */
-    border: 2px dashed #999999;
-    background-color: #e6e6e6;
+    border: 2px dashed #999;
+    background-color: transparent;
   }
-  .hidden {
-    display: none;
+  .draggables-container {
+    position: absolute;
+    right: 50px; /* Adjust as needed */
+    top: 50px; /* Adjust as needed */
+  }
+  .image-container {
+    position: relative;
+    width: 864px; /* Width of the image */
+    height: 561px; /* Height of the image */
+    margin-bottom: 20px;
+  }
+  #result {
+    margin-top: 10px;
   }
 </style>
 </head>
@@ -28,26 +42,27 @@
 
 <h2>Drag the cell part names into the correct boxes</h2>
 
-<!-- Draggable items -->
-<div id="nucleus" draggable="true" class="draggable">Nucleus</div>
-<div id="mitochondria" draggable="true" class="draggable">Mitochondria</div>
-<div id="cellmembrane" draggable="true" class="draggable">Cell Membrane</div>
-<div id="endoplasmicreticulum" draggable="true" class="draggable">Endoplasmic Reticulum</div>
-<div id="lysosome" draggable="true" class="draggable">Lysosome</div>
-<div id="golgiapparatus" draggable="true" class="draggable">Golgi Apparatus</div>
-<div id="cytosol" draggable="true" class="draggable">Cytosol</div>
-
-<!-- The cell image with drop zones placed absolutely -->
-<div style="position: relative; width: 864px; height: 561px;">
-  <img src="Cell Diagram Blank.png" style="width: 864px; height: 561px;" alt="Cell Diagram">
+<div class="image-container">
+  <img src="Cell Diagram Blank.png" alt="Cell Diagram" style="width: 864px; height: 561px;">
   <!-- Position drop zones as needed -->
-  <div id="dropzone-nucleus" class="dropzone" style="top: 80px; left: 180px;"></div>
-  <div id="dropzone-mitochondria" class="dropzone" style="top: 150px; left: 250px;"></div>
-  <div id="dropzone-cellmembrane" class="dropzone" style="top: 220px; left: 320px;"></div>
-  <div id="dropzone-endoplasmicreticulum" class="dropzone" style="top: 290px; left: 390px;"></div>
-  <div id="dropzone-lysosome" class="dropzone" style="top: 360px; left: 460px;"></div>
-  <div id="dropzone-golgiapparatus" class="dropzone" style="top: 430px; left: 530px;"></div>
-  <div id="dropzone-cytosol" class="dropzone" style="top: 500px; left: 600px;"></div>
+  <div id="dropzone-nucleus" class="dropzone" style="top: 100px; left: 150px;"></div>
+  <div id="dropzone-mitochondria" class="dropzone" style="top: 180px; left: 220px;"></div>
+  <div id="dropzone-cellmembrane" class="dropzone" style="top: 260px; left: 290px;"></div>
+  <div id="dropzone-endoplasmicreticulum" class="dropzone" style="top: 340px; left: 360px;"></div>
+  <div id="dropzone-lysosome" class="dropzone" style="top: 420px; left: 430px;"></div>
+  <div id="dropzone-golgiapparatus" class="dropzone" style="top: 500px; left: 500px;"></div>
+  <div id="dropzone-cytosol" class="dropzone" style="top: 420px; left: 570px;"></div>
+</div>
+
+<div class="draggables-container">
+  <!-- Draggable items -->
+  <div id="nucleus" draggable="true" class="draggable">Nucleus</div>
+  <div id="mitochondria" draggable="true" class="draggable">Mitochondria</div>
+  <div id="cellmembrane" draggable="true" class="draggable">Cell Membrane</div>
+  <div id="endoplasmicreticulum" draggable="true" class="draggable">Endoplasmic Reticulum</div>
+  <div id="lysosome" draggable="true" class="draggable">Lysosome</div>
+  <div id="golgiapparatus" draggable="true" class="draggable">Golgi Apparatus</div>
+  <div id="cytosol" draggable="true" class="draggable">Cytosol</div>
 </div>
 
 <button onclick="checkAnswers()">Check Answers</button>
@@ -59,25 +74,26 @@
   var draggableId = '';
 
   draggables.forEach(function(draggable) {
-    draggable.addEventListener('dragstart', function(e) {
-      draggableId = e.target.id; // Get the id of the element being dragged
-      e.dataTransfer.setData('text/plain', draggableId);
+    draggable.addEventListener('dragstart', function(event) {
+      draggableId = event.target.id; // Get the id of the element being dragged
+      event.dataTransfer.setData('text/plain', draggableId);
     });
   });
 
   dropzones.forEach(function(dropzone) {
-    dropzone.addEventListener('dragover', function(e) {
-      e.preventDefault(); // Prevent default to allow drop
+    dropzone.addEventListener('dragover', function(event) {
+      event.preventDefault(); // Prevent default to allow drop
     });
 
-    dropzone.addEventListener('drop', function(e) {
-      e.preventDefault();
-      var droppedElementId = e.dataTransfer.getData('text');
-      var targetId = e.target.id.replace('dropzone-', '');
+    dropzone.addEventListener('drop', function(event) {
+      event.preventDefault();
+      var droppedElementId = event.dataTransfer.getData('text');
+      var targetId = event.target.id.replace('dropzone-', '');
       if (droppedElementId === targetId) {
-        e.target.appendChild(document.getElementById(droppedElementId));
+        event.target.appendChild(document.getElementById(droppedElementId));
+        event.target.style.background = '#9f9'; // Highlight the dropzone with color on correct drop
       } else {
-        alert('Incorrect! Try again.');
+        event.target.style.background = '#f99'; // Highlight the dropzone with color on incorrect drop
       }
     });
   });
