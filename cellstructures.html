@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cell Structure Drag and Drop Quiz</title>
+<style>
+  .draggable {
+    padding: 5px;
+    margin: 5px;
+    background-color: #f2f2f2;
+    border: 1px solid #cccccc;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dropzone {
+    position: absolute;
+    width: 150px; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+    border: 2px dashed #999999;
+    background-color: #e6e6e6;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<h2>Drag the cell part names into the correct boxes</h2>
+
+<!-- Draggable items -->
+<div id="nucleus" draggable="true" class="draggable">Nucleus</div>
+<div id="mitochondria" draggable="true" class="draggable">Mitochondria</div>
+<div id="cellmembrane" draggable="true" class="draggable">Cell Membrane</div>
+<div id="endoplasmicreticulum" draggable="true" class="draggable">Endoplasmic Reticulum</div>
+<div id="lysosome" draggable="true" class="draggable">Lysosome</div>
+<div id="golgiapparatus" draggable="true" class="draggable">Golgi Apparatus</div>
+<div id="cytosol" draggable="true" class="draggable">Cytosol</div>
+
+<!-- The cell image with drop zones placed absolutely -->
+<div style="position: relative; width: 864px; height: 561px;">
+  <img src="Cell Diagram Blank.png" style="width: 864px; height: 561px;" alt="Cell Diagram">
+  <!-- Position drop zones as needed -->
+  <div id="dropzone-nucleus" class="dropzone" style="top: 80px; left: 180px;"></div>
+  <div id="dropzone-mitochondria" class="dropzone" style="top: 150px; left: 250px;"></div>
+  <div id="dropzone-cellmembrane" class="dropzone" style="top: 220px; left: 320px;"></div>
+  <div id="dropzone-endoplasmicreticulum" class="dropzone" style="top: 290px; left: 390px;"></div>
+  <div id="dropzone-lysosome" class="dropzone" style="top: 360px; left: 460px;"></div>
+  <div id="dropzone-golgiapparatus" class="dropzone" style="top: 430px; left: 530px;"></div>
+  <div id="dropzone-cytosol" class="dropzone" style="top: 500px; left: 600px;"></div>
+</div>
+
+<button onclick="checkAnswers()">Check Answers</button>
+<p id="result"></p>
+
+<script>
+  var draggables = document.querySelectorAll('.draggable');
+  var dropzones = document.querySelectorAll('.dropzone');
+  var draggableId = '';
+
+  draggables.forEach(function(draggable) {
+    draggable.addEventListener('dragstart', function(e) {
+      draggableId = e.target.id; // Get the id of the element being dragged
+      e.dataTransfer.setData('text/plain', draggableId);
+    });
+  });
+
+  dropzones.forEach(function(dropzone) {
+    dropzone.addEventListener('dragover', function(e) {
+      e.preventDefault(); // Prevent default to allow drop
+    });
+
+    dropzone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      var droppedElementId = e.dataTransfer.getData('text');
+      var targetId = e.target.id.replace('dropzone-', '');
+      if (droppedElementId === targetId) {
+        e.target.appendChild(document.getElementById(droppedElementId));
+      } else {
+        alert('Incorrect! Try again.');
+      }
+    });
+  });
+
+  function checkAnswers() {
+    var correctCount = 0;
+    dropzones.forEach(function(dropzone) {
+      if (dropzone.childNodes.length > 0 && dropzone.childNodes[0].id === dropzone.id.replace('dropzone-', '')) {
+        correctCount++;
+      }
+    });
+
+    var resultText = correctCount === draggables.length ? 'All answers are correct!' : 'Some answers are incorrect, please try again.';
+    document.getElementById('result').textContent = resultText;
+  }
+</script>
+
+</body>
+</html>
