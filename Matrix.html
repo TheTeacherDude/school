@@ -10,19 +10,19 @@
 <style>
   .draggable {
     cursor: pointer;
-  }
-  [draggable] {
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
     user-select: none;
-    /* Required to make elements draggable in old WebKit */
-    -khtml-user-drag: element;
-    -webkit-user-drag: element;
   }
   .scrollable-list {
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
+  }
+  .matrix-label {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .matrix-box {
+    min-height: 150px;
   }
 </style>
 </head>
@@ -31,24 +31,41 @@
 <div id="content" class="container mx-auto bg-white p-6 shadow-lg">
   <h2 class="text-xl font-bold mb-4">Dynamics Matrix <span class="text-sm font-normal">(${new Date().toLocaleDateString()})</span></h2>
   
-  <div id="student-list" class="scrollable-list mb-4 border border-gray-300 p-2 rounded">
-    <!-- Draggable student names will be added here by JavaScript -->
-  </div>
+  <div class="flex">
+    <div id="student-list" class="scrollable-list border border-gray-300 p-2 rounded mr-4">
+      <!-- Draggable student names will be added here by JavaScript -->
+    </div>
 
-  <div class="grid grid-cols-3 gap-4 mb-4 text-center font-bold">
-    <div>+ = Positive leaders</div>
-    <div>Neutral</div>
-    <div>- = Negative leaders</div>
-  </div>
+    <div class="flex-grow">
+      <div class="grid grid-cols-3 gap-4 mb-4 text-center font-bold">
+        <div>+ = Positive leaders</div>
+        <div>Neutral</div>
+        <div>- = Negative leaders</div>
+      </div>
 
-  <div class="flex justify-between mb-4">
-    <div class="font-bold">Upper Half Status</div>
-    <div class="font-bold">Lower Half Status</div>
-  </div>
+      <div class="flex mb-4">
+        <div class="matrix-label font-bold">Upper Half Status</div>
+        <div class="flex-grow grid grid-cols-3 gap-4">
+          <!-- Upper Half Status boxes will be added here by JavaScript -->
+        </div>
+      </div>
 
-  <div id="matrix" class="grid grid-cols-3 gap-4">
-    <!-- Droppable matrix boxes will be added here by JavaScript -->
+      <div class="flex">
+        <div class="matrix-label font-bold">Lower Half Status</div>
+        <div class="flex-grow grid grid-cols-3 gap-4">
+          <!-- Lower Half Status boxes will be added here by JavaScript -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="mt-4">
-    <button id="print" class="px-4
+    <button id="print" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printPDF()">Print as PDF</button>
+  </div>
+</div>
+
+<script>
+// JavaScript code will go here
+</script>
+</body>
+</html>
