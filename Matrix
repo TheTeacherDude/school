@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamics Matrix</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<style>
+  .draggable {
+    cursor: pointer;
+  }
+  [draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+  }
+</style>
+</head>
+<body class="bg-gray-100 p-8">
+
+<div id="content" class="container mx-auto bg-white p-6 shadow-lg">
+  <h2 class="text-xl font-bold mb-4">Dynamics Matrix</h2>
+  
+  <div id="student-list" class="mb-4">
+    <!-- Draggable student names here -->
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 mb-4">
+    <div class="text-center">+ = Positive leaders</div>
+    <div class="text-center">Neutral</div>
+    <div class="text-center">- = Negative leaders</div>
+  </div>
+
+  <div id="matrix" class="grid grid-cols-3 gap-4">
+    <!-- Droppable matrix boxes here -->
+  </div>
+
+  <div class="mt-4">
+    <button id="print" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printPDF()">Print</button>
+  </div>
+</div>
+
+<script>
+const students = ['Alex', 'Alanna', 'Aireonna', 'Clarence', 'Dalton', 'Deontay', 'D\'Auginae', 'DeShawn', 'Khyemere', 'Kemoni', 'LaDon', 'Marlon', 'Shawn', 'Sha\'lien', 'Terrance', 'Xavion', 'Zamya'];
+
+// Function to make an element draggable
+function makeDraggable(elem) {
+  elem.setAttribute('draggable', true);
+  elem.addEventListener('dragstart', (event) => {
+    event.dataTransfer.setData('text/plain', event.target.id);
+  });
+}
+
+// Function to create a droppable box
+function makeDroppable(elem) {
+  elem.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  });
+
+  elem.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const data = event.dataTransfer.getData('text/plain');
+    event.target.appendChild(document.getElementById(data));
+    updateMostStudentsBox();
+  });
+}
+
+// Function to update the box with most students
+function updateMostStudentsBox() {
+  let maxCount = 0;
+  let maxBox = null;
+  document.querySelectorAll('.droppable').forEach(box => {
+    const count = box.children.length;
+    if (count > maxCount) {
+      maxCount = count;
+      maxBox = box;
+    }
+  });
+  document.querySelectorAll('.droppable').forEach(box => {
+    box.classList.remove('border-4', 'border-red-500');
+  });
+  if (maxBox) maxBox.classList.add('border-4', 'border-red-500');
+}
+
+// Function to print the matrix as PDF
+function printPDF() {
+  html2pdf().from(document.getElementById('content')).set({
+    margin: 10,
+    filename: 'DynamicsMatrix.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save();
+}
+
+// Add the student names to the list
+const studentList = document.getElementById('student-list');
+students.forEach((name, index) => {
+  const studentDiv = document.createElement('div');
+  studentDiv.textContent = name;
+  studentDiv.id = 'student-' + index;
+  studentDiv.className = 'draggable p-2 bg-gray-200 my-1 rounded shadow cursor-move';
+  makeDraggable(studentDiv);
+  studentList.appendChild(studentDiv);
+});
+
+// Create the matrix boxes
+const matrix = document.getElementById('matrix');
+['Positive', 'Neutral', 'Negative'].forEach((status) => {
+  ['Upper Half Status', 'Lower Half Status'].forEach((half) => {
+    const box = document.createElement('div');
+    box.className = 'droppable p-4 bg-gray-100 border-2 border-gray-300 rounded min-h-[100px]';
+    makeDroppable(box);
+    matrix.appendChild(box);
+  });
+});
+
+</script>
+</body>
+</html>
