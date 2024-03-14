@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag and Drop World Oceans</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  #map-container {
+    position: relative;
+    width: 980px; /* Adjust as necessary to fit the map image */
+    height: 670px; /* Adjust as necessary to fit the map image */
+  }
+
+  .draggable {
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    cursor: move;
+    user-select: none;
+  }
+
+  .dropzone {
+    position: absolute;
+    width: 150px; /* Adjust width and height as necessary */
+    height: 50px;
+    border: 2px dashed #666;
+    border-radius: 5px;
+    /* Position these over the correct locations on the map */
+  }
+
+  #correctNotification {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<div id="map-container">
+  <img src="Oceans.png" alt="World Map" style="width: 100%; height: auto;">
+  <!-- Replace 'Oceans.png' with the path to your map image -->
+  <!-- Define dropzones with approximate positions on the map -->
+  <div id="dropzoneAtlantic" class="dropzone" style="top: 200px; left: 300px;"></div>
+  <div id="dropzonePacific" class="dropzone" style="top: 200px; left: 600px;"></div>
+  <div id="dropzoneIndian" class="dropzone" style="top: 400px; left: 500px;"></div>
+  <!-- Add other oceans as needed -->
+  
+  <!-- Draggable ocean names -->
+  <div id="Atlantic" class="draggable" draggable="true" style="top: 720px; left: 100px;">Atlantic Ocean</div>
+  <div id="Pacific" class="draggable" draggable="true" style="top: 720px; left: 250px;">Pacific Ocean</div>
+  <div id="Indian" class="draggable" draggable="true" style="top: 720px; left: 400px;">Indian Ocean</div>
+  <!-- Add other ocean names as needed -->
+</div>
+
+<!-- Notification for correct placement -->
+<div id="correctNotification">
+  <img src="correct.png" alt="Correct" />
+  <!-- Replace 'correct.png' with the path to your correct notification image -->
+</div>
+
+<script>
+  const oceans = {
+    'Atlantic': 'dropzoneAtlantic',
+    'Pacific': 'dropzonePacific',
+    'Indian': 'dropzoneIndian',
+    // Add other ocean-dropzone pairs here
+  };
+
+  let correctCount = 0;
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const draggables = document.querySelectorAll('.draggable');
+    const dropzones = document.querySelectorAll('.dropzone');
+    const correctNotification = document.getElementById('correctNotification');
+
+    draggables.forEach(draggable => {
+      draggable.addEventListener('dragstart', event => {
+        event.dataTransfer.setData('text/plain', event.target.id);
+      });
+    });
+
+    dropzones.forEach(dropzone => {
+      dropzone.addEventListener('dragover', event => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+      });
+
+      dropzone.addEventListener('drop', event => {
+        event.preventDefault();
+        const oceanId = event.dataTransfer.getData('text/plain');
+        const ocean = document.getElementById(oceanId);
+        const correctDropzone = oceans[oceanId];
+        
+        if (correctDropzone === event.target.id) {
+          event.target.appendChild(ocean);
+          ocean.style.position = 'static';
+          ocean.style.backgroundColor = '#9f9'; // Change color to indicate correct placement
+          correctCount++;
+          
+          if (correctCount === Object.keys(oceans).length) {
+            correctNotification.style.display = 'block';
+          }
+        }
+      });
+    });
+  });
+
+  function resetDragAndDrop() {
+    const draggables = document.querySelectorAll('.draggable');
+    correctCount = 0;
+    document.getElementById('correctNotification').style.display = 'none';
+    draggables.forEach(draggable => {
+      draggable.style.position = 'absolute';
+      draggable.style.backgroundColor = '#f9f9f9';
+      document.getElementById('map-container').appendChild(draggable);
+      // Reset position to original location
+      draggable.style.top = '720px';
+      draggable.style.left = `${100 + (draggables.indexOf(draggable) * 150)}px`;
+    });
+  }
+</script>
+
+<button onclick="resetDragAndDrop()">Reset</button>
+
+</body>
+</html>
