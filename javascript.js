@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    const draggables = document.querySelectorAll('.draggable');
-    const dropzones = document.querySelectorAll('.dropzone');
+    const container = document.getElementById('timeUnits');
+    const draggables = Array.from(container.querySelectorAll('.draggable'));
+    shuffleElements(draggables);
 
     draggables.forEach(draggable => {
         draggable.addEventListener('dragstart', () => {
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
+    const dropzones = document.querySelectorAll('.dropzone');
     dropzones.forEach(zone => {
         zone.addEventListener('dragover', e => {
             e.preventDefault();
@@ -24,6 +26,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         });
     });
+
+    function shuffleElements(elements) {
+        for (let i = elements.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            elements[i].style.order = j;
+            elements[j].style.order = i;
+        }
+    }
 
     function getDragAfterElement(container, y) {
         const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
