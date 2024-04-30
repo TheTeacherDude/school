@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.draggable {
+    width: 100px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+}
+
+.dropzone {
+    width: 300px;
+    height: 50px;
+    padding: 10px;
+    background-color: #eee;
+    border: 1px dashed #ccc;
+    text-align: center;
+    line-height: 30px;
+}
+
+.draggable.over {
+    border-color: #000;
+}
